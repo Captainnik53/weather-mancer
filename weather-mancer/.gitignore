@@ -39,5 +39,3 @@ testem.log
 Thumbs.db
 
 .angular
-
-src/app/modules/weather-dashboard/weather-app-config.ts
