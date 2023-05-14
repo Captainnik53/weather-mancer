@@ -13,7 +13,7 @@ import {
 })
 export class WeatherService {
   private weatherApi = 'https://api.openweathermap.org/data/2.5/weather';
-  private geoCoordinatesApi = 'http://api.openweathermap.org/geo/1.0/direct';
+  private geoCoordinatesApi = 'https://api.openweathermap.org/geo/1.0/direct';
   constructor(private httpClient: HttpClient) {}
 
   getWeatherData(geoCoordinates: Coordinates): Observable<WeatherDataResponse> {
