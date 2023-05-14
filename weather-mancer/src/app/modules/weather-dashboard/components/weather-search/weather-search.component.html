@@ -1,0 +1,28 @@
+
+<div class="text-2xl search-text-font flex flex-row items-center justify-center">
+  <div class="text-gray-400 pt-2">How's the weather in</div>
+  <mat-form-field class="pl-4" appearance="outline">
+    <input matInput="matInput" [formControl]="city" autofocus="autofocus" #cityName=""/>
+  </mat-form-field>
+  <div class="text-gray-400 pl-4 pt-2">right now ?</div>
+</div>
+<div class="text-xl weather-icon flex flex-row items-center justify-center text-center">
+  <div class="w-64 flex flex-col"><img class="h-48" [src]="weatherImageURL" alt="Weather description"/>
+    <div class="text-sm absolute bottom-4 text-gray-400 search-text-font">{{ weatherDetails ? weatherDetails.weather[0].description : 'Clear sky'}}</div>
+  </div>
+  <div class="w-64 flex flex-col">
+    <div class="text-black text-8xl font-thin">{{weatherDetails ? weatherDetails.main.temp : '30'}}</div>
+    <div class="text-gray-400 text-sm font-thin padding pl-2">{{weatherDetails ? weatherDetails.main.temp_min : '20'}} &#176; | {{weatherDetails ? weatherDetails.main.temp_max : '30'}} &#176;</div>
+  </div>
+  <div class="flex flex-col w-42 margin ml-20 text-center">
+    <div class="flex flex-row items-center justify-start"> <span class="material-symbols-outlined text-gray-400 cursor-pointer" title="Wind speed">air</span>
+      <div class="flex flex-row items-center justify-center"> <span class="text-2xl text-gray-400 padding pl-4">{{weatherDetails ? weatherDetails.wind.speed : '4'}}</span><span class="text-lg text-gray-400 padding pt-2">&#13223;</span></div>
+    </div>
+    <div class="flex flex-row items-center justify-start"> <span class="material-symbols-outlined text-gray-400 cursor-pointer" title="Humidity">humidity_low</span>
+      <div class="flex flex-row items-center justify-center"> <span class="text-2xl text-gray-400 padding pl-4">{{weatherDetails ? weatherDetails.main.humidity : '30' }}</span><span class="text-lg text-gray-400 padding pt-2">&#37;</span></div>
+    </div>
+    <div class="flex flex-row items-center justify-start"> <span class="material-symbols-outlined text-gray-400 cursor-pointer" title="Visibility">visibility</span>
+      <div class="flex flex-row items-center justify-center"> <span class="text-2xl text-gray-400 padding pl-4">{{weatherDetails ? weatherDetails.visibility : '10' }}</span><span class="text-lg text-gray-400 padding pt-2">&#13214;</span></div>
+    </div>
+  </div>
+</div>

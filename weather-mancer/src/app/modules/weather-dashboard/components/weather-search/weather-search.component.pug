@@ -1,0 +1,36 @@
+div.text-2xl.search-text-font.flex.flex-row.items-center.justify-center
+	div.text-gray-400.pt-2 How's the weather in
+	mat-form-field.pl-4(appearance="outline")
+		input(matInput, [formControl]="city", autofocus, #cityName="")
+	div.text-gray-400.pl-4.pt-2 right now ?
+
+div.text-xl.weather-icon.flex.flex-row.items-center.justify-center.text-center
+	div.w-64.flex.flex-col
+		img.h-48([src]="weatherImageURL", alt="Weather description")
+		div.text-sm.absolute.bottom-4.text-gray-400.search-text-font {{ weatherDetails ? weatherDetails.weather[0].description : 'Clear sky'}}
+	div.w-64.flex.flex-col
+		div.text-black.text-8xl.font-thin {{weatherDetails ? weatherDetails.main.temp : '30'}}
+		div.text-gray-400.text-sm.font-thin.padding.pl-2 {{weatherDetails ? weatherDetails.main.temp_min : '20'}} &#176; | {{weatherDetails ? weatherDetails.main.temp_max : '30'}} &#176;
+	div.flex.flex-col.w-42.margin.ml-20.text-center
+		//- wind
+		div.flex.flex-row.items-center.justify-start 
+			span.material-symbols-outlined.text-gray-400.cursor-pointer(title="Wind speed") air
+			div.flex.flex-row.items-center.justify-center 
+				span.text-2xl.text-gray-400.padding.pl-4 {{weatherDetails ? weatherDetails.wind.speed : '4'}}
+				span.text-lg.text-gray-400.padding.pt-2 &#13223;
+		
+		//- humidity
+		div.flex.flex-row.items-center.justify-start 
+			span.material-symbols-outlined.text-gray-400.cursor-pointer(title="Humidity") humidity_low
+			div.flex.flex-row.items-center.justify-center 
+				span.text-2xl.text-gray-400.padding.pl-4 {{weatherDetails ? weatherDetails.main.humidity : '30' }}
+				span.text-lg.text-gray-400.padding.pt-2 &#37;
+
+		//- visibility
+		div.flex.flex-row.items-center.justify-start 
+			span.material-symbols-outlined.text-gray-400.cursor-pointer(title="Visibility") visibility
+			div.flex.flex-row.items-center.justify-center 
+				span.text-2xl.text-gray-400.padding.pl-4 {{weatherDetails ? weatherDetails.visibility : '10' }}
+				span.text-lg.text-gray-400.padding.pt-2 &#13214;
+		
+		

@@ -1,0 +1,40 @@
+@import url(./styles.css);
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-form-field {
+    .mdc-text-field {
+        font-size:x-large;
+        padding-bottom: 1px;
+        padding-top: 5px;
+        background-color: white;
+        font-weight:600;
+        font-family:'Trebuchet MS';
+
+       
+
+        .mat-mdc-form-field-flex {
+            .mat-mdc-form-field-infix {
+                padding-top: 24px;
+                padding-bottom: 1px;
+            }
+            
+            .mdc-notched-outline {
+                border-bottom: 1px solid rgb(128, 128, 128);
+                .mdc-notched-outline__leading {
+                    border: none;
+                }
+
+                .mdc-notched-outline__notch {
+                    border: none;
+                }
+
+                .mdc-notched-outline__trailing {
+                    border: none;
+                }
+
+            }
+        }
+    }
+
+}
