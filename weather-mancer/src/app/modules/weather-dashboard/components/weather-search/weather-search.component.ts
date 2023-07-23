@@ -2,12 +2,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, take } from 'rxjs';
 import {
   Coordinates,
+  messageItem,
   WeatherDataResponse,
 } from '../../interfaces/weather.model';
 import { WeatherService } from '../../services/weather.service';
@@ -21,11 +24,21 @@ import { WeatherService } from '../../services/weather.service';
 export class WeatherSearchComponent implements OnInit {
   public city = new FormControl('');
 
+  public chatPrompt = new FormControl('');
+
   private weatherImageBaseURL = 'assets/weather_icons/svg/';
 
   public weatherImageURL = 'assets/weather_icons/svg/clear-day.svg';
 
   public weatherDetails!: WeatherDataResponse;
+
+  public messageList: messageItem[] = [];
+
+  public fetchingBotResponse = false;
+
+  public isChatWindowOpen = false;
+
+  @ViewChild('scrollBar') private myScrollContainer!: ElementRef;
 
   constructor(
     private weatherService: WeatherService,
@@ -33,6 +46,16 @@ export class WeatherSearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.messageList.push({
+      messageFrom: 'bot',
+      message: "Welcome! I'm your personal weather bot.",
+    });
+    this.messageList.push({
+      messageFrom: 'bot',
+      message:
+        "Ask me anything about the weather and I'll provide real-time updates for any city you're curious about.",
+    });
+
     this.city.valueChanges.pipe(debounceTime(400)).subscribe((cityValue) => {
       if (cityValue) {
         this.getGeoCoordinatesForCity(cityValue);
@@ -339,5 +362,53 @@ export class WeatherSearchComponent implements OnInit {
 
   public convertToTitleCase(inputString: string) {
     return inputString.charAt(0).toUpperCase() + inputString.slice(1);
+  }
+
+  public submitPrompt() {
+    const message = this.chatPrompt.value;
+
+    if (message) {
+      this.messageList.push({
+        messageFrom: 'user',
+        message: message,
+      });
+      this.chatPrompt.setValue('');
+      this.changeDetectorRef.detectChanges();
+      this.fetchingBotResponse = true;
+      this.changeDetectorRef.detectChanges();
+      this.scrollToBottom();
+      const messageForOpenAIModel =
+        'If the below message asks anything related to weather information then return the information, or else tell them politely that you will only provide weather information. The message is following - ' +
+        message;
+      this.weatherService
+        .getDataFromOpenAI(messageForOpenAIModel)
+        .pipe(take(1))
+        .subscribe((response) => {
+          if (response?.data?.choices?.length) {
+            const messageFromChatBot = response?.data?.choices[0]?.text;
+            this.messageList.push({
+              messageFrom: 'bot',
+              message: messageFromChatBot,
+            });
+            this.chatPrompt.setValue('');
+            this.fetchingBotResponse = false;
+            this.changeDetectorRef.detectChanges();
+            this.scrollToBottom();
+          }
+        });
+    }
+  }
+
+  scrollToBottom(): void {
+    if (this.myScrollContainer) {
+      this.myScrollContainer.nativeElement.scrollTop =
+        this.myScrollContainer.nativeElement.scrollHeight;
+      this.changeDetectorRef.detectChanges();
+    }
+  }
+
+  public toggleWeatherBot() {
+    this.isChatWindowOpen = !this.isChatWindowOpen;
+    this.changeDetectorRef.detectChanges();
   }
 }

@@ -1,7 +1,7 @@
 
 <div class="text-2xl search-text-font flex flex-row items-center justify-center">
   <div class="text-gray-400 pt-2">How's the weather in</div>
-  <mat-form-field class="pl-4" appearance="outline">
+  <mat-form-field class="pl-4 pt-2" appearance="outline">
     <input matInput="matInput" [formControl]="city" autofocus="autofocus" #cityName=""/>
   </mat-form-field>
   <div class="text-gray-400 pl-4 pt-2">right now ?</div>
@@ -25,4 +25,24 @@
       <div class="flex flex-row items-center justify-center"> <span class="text-2xl text-gray-400 padding pl-4">{{weatherDetails ? weatherDetails.visibility : '10' }}</span><span class="text-lg text-gray-400 padding pt-2">&#13214;</span></div>
     </div>
   </div>
+</div>
+<div class="chatbot-container bot-font text-sm flex flex-col" *ngIf="isChatWindowOpen">
+  <div class="chatbot-content">
+    <div class="chatbot-header">
+      <div class="text-lg padding pl-2">Weather Mancer</div>
+    </div>
+    <div class="chatbot-messages" #scrollBar="">
+      <div class="message bot-message" *ngFor="let messageItem of messageList;" [ngClass]="{'bot-message': messageItem.messageFrom === 'bot', 'user-message':  messageItem.messageFrom === 'user'}">
+        <div class="text-black-400">{{messageItem.message}}</div>
+      </div>
+      <div class="dot-flashing" *ngIf="fetchingBotResponse"></div>
+    </div>
+    <div class="chatbot-input">
+      <textarea class="chatbot-textarea max-h-14" cdkTextareaAutosize="cdkTextareaAutosize" placeholder="Type to try weather mancer..." cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" [formControl]="chatPrompt"></textarea>
+      <button class="margin ml-2" mat-flat-button="mat-flat-button" (click)="submitPrompt()" [disabled]="!chatPrompt.value"><span class="material-symbols-outlined">send</span></button>
+    </div>
+  </div>
+</div>
+<div class="open-bot" [ngClass]="{'closed-window': !isChatWindowOpen}" [title]="!isChatWindowOpen ? 'Open weather bot' : 'Close weather bot'">
+  <button class="cursor-pointer material-symbols-outlined pt-2" mat-flat-button="mat-flat-button" (click)="toggleWeatherBot()">{{isChatWindowOpen ? 'close' : 'help'}}</button>
 </div>

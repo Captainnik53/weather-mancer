@@ -1,6 +1,6 @@
 div.text-2xl.search-text-font.flex.flex-row.items-center.justify-center
 	div.text-gray-400.pt-2 How's the weather in
-	mat-form-field.pl-4(appearance="outline")
+	mat-form-field.pl-4.pt-2(appearance="outline")
 		input(matInput, [formControl]="city", autofocus, #cityName="")
 	div.text-gray-400.pl-4.pt-2 right now ?
 
@@ -33,4 +33,20 @@ div.text-xl.weather-icon.flex.flex-row.items-center.justify-center.text-center
 				span.text-2xl.text-gray-400.padding.pl-4 {{weatherDetails ? weatherDetails.visibility : '10' }}
 				span.text-lg.text-gray-400.padding.pt-2 &#13214;
 		
-		
+
+.chatbot-container.bot-font.text-sm.flex.flex-col(*ngIf="isChatWindowOpen")
+	div.chatbot-content
+		.chatbot-header
+			div.text-lg.padding.pl-2 Weather Mancer
+		.chatbot-messages(#scrollBar='')
+			.message.bot-message(*ngFor="let messageItem of messageList;", [ngClass]="{'bot-message': messageItem.messageFrom === 'bot', 'user-message':  messageItem.messageFrom === 'user'}")
+				div.text-black-400 {{messageItem.message}}
+			.dot-flashing(*ngIf="fetchingBotResponse")
+		.chatbot-input
+			textarea.chatbot-textarea.max-h-14(cdkTextareaAutosize, placeholder="Type to try weather mancer...", cdkAutosizeMinRows="1", cdkAutosizeMaxRows="4", [formControl]="chatPrompt")
+			button.margin.ml-2(mat-flat-button, (click)="submitPrompt()", [disabled]="!chatPrompt.value")
+				span.material-symbols-outlined send
+	
+div.open-bot([ngClass]="{'closed-window': !isChatWindowOpen}", [title]="!isChatWindowOpen ? 'Open weather bot' : 'Close weather bot'")
+	button.cursor-pointer.material-symbols-outlined.pt-2(mat-flat-button, (click)="toggleWeatherBot()") {{isChatWindowOpen ? 'close' : 'help'}}
+

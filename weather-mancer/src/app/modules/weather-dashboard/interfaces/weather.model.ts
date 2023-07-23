@@ -52,4 +52,14 @@ interface WeatherDataResponse {
   cod: number;
 }
 
-export { Coordinates, GeoCoordinatesApiResponseItem, WeatherDataResponse };
+interface messageItem {
+  messageFrom: string;
+  message: string;
+}
+
+export {
+  Coordinates,
+  GeoCoordinatesApiResponseItem,
+  WeatherDataResponse,
+  messageItem,
+};
