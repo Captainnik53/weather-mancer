@@ -17,7 +17,7 @@ export class WeatherService {
   private geoCoordinatesApi = 'https://api.openweathermap.org/geo/1.0/direct';
 
   readonly openAIConfiguration = new Configuration({
-    apiKey: config.chatGPTApiKey,
+    apiKey: process.env['OPENAI_API_KEY'],
   });
 
   readonly openAIApi = new OpenAIApi(this.openAIConfiguration);
