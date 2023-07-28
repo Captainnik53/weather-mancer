@@ -9,6 +9,7 @@ import {
   WeatherDataResponse,
 } from '../interfaces/weather.model';
 import { Configuration, OpenAIApi } from 'openai';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,7 +18,7 @@ export class WeatherService {
   private geoCoordinatesApi = 'https://api.openweathermap.org/geo/1.0/direct';
 
   readonly openAIConfiguration = new Configuration({
-    apiKey: config.chatGPTApiKey,
+    apiKey: environment.chatGPTApiKey,
   });
 
   readonly openAIApi = new OpenAIApi(this.openAIConfiguration);
