@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
-    "build": "npm run config && nx build",
+    "build": "node config.js && nx build",
     "test": "nx test",
     "pug:w": "pug src -P -w"
   },
@@ -22,6 +22,7 @@
     "@angular/router": "~16.0.0",
     "@nx/angular": "16.1.1",
     "@vercel/analytics": "1.0.1",
+    "colors": "1.4.0",
     "openai": "3.2.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
