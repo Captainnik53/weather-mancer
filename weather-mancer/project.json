@@ -33,6 +33,12 @@
               "maximumError": "4kb"
             }
           ],
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.prod.ts",
+              "with": "src/environments/environment.prod.vercel.ts"
+            }
+          ],
           "outputHashing": "all"
         },
         "development": {
