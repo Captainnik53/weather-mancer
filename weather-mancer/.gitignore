@@ -42,4 +42,3 @@ Thumbs.db
 .vercel
 src/app/modules/weather-dashboard/weather-app-config.ts
 .env
-/src/environments/environment.ts

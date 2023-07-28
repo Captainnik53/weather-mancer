@@ -9,7 +9,7 @@ import {
   WeatherDataResponse,
 } from '../interfaces/weather.model';
 import { Configuration, OpenAIApi } from 'openai';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.prod';
 @Injectable({
   providedIn: 'root',
 })
