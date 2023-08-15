@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -37,6 +38,8 @@ export class WeatherSearchComponent implements OnInit {
   public fetchingBotResponse = false;
 
   public isChatWindowOpen = false;
+
+  public messageForOpenAIModel: any[] = [];
 
   @ViewChild('scrollBar') private myScrollContainer!: ElementRef;
 
@@ -377,18 +380,30 @@ export class WeatherSearchComponent implements OnInit {
       this.fetchingBotResponse = true;
       this.changeDetectorRef.detectChanges();
       this.scrollToBottom();
-      const messageForOpenAIModel =
-        'If the below message asks anything related to weather information then return the information, or else tell them politely that you will only provide weather information. The message is following - ' +
-        message;
+      if (!this.messageForOpenAIModel.length) {
+        this.messageForOpenAIModel.push({
+          role: 'system',
+          content:
+            'You are a good weather bot assistant that provide information related to real-time weather updates or weather forecast or weather warnings or rain or snow related information to the user in single response. It should also provide temperature, humidity, wind speed, precipitation, etc. related information too if asked by user. Your name is weather mancer',
+        });
+      }
+      this.messageForOpenAIModel.push({
+        role: 'user',
+        content: message,
+      });
       this.weatherService
-        .getDataFromOpenAI(messageForOpenAIModel)
+        .getDataFromOpenAI(this.messageForOpenAIModel)
         .pipe(take(1))
         .subscribe((response) => {
-          if (response?.data?.choices?.length) {
-            const messageFromChatBot = response?.data?.choices[0]?.text;
+          if (response?.choices?.length) {
+            const messageFromChatBot = response?.choices[0]?.message?.content;
             this.messageList.push({
               messageFrom: 'bot',
               message: messageFromChatBot,
+            });
+            this.messageForOpenAIModel.push({
+              role: 'assistant',
+              content: messageFromChatBot,
             });
             this.chatPrompt.setValue('');
             this.fetchingBotResponse = false;

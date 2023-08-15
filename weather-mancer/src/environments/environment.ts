@@ -1,5 +1,4 @@
-// environment.ts
 export const environment = {
-  production: false,
+  production: true,
   // Add other development-specific variables here
 };

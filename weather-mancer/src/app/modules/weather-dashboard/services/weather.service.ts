@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { from, map, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { config } from '../weather-app-config';
 import {
   Coordinates,
   GeoCoordinatesApiResponseItem,
   WeatherDataResponse,
 } from '../interfaces/weather.model';
-import { Configuration, OpenAIApi } from 'openai';
 import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
@@ -16,12 +15,6 @@ import { environment } from 'src/environments/environment';
 export class WeatherService {
   private weatherApi = 'https://api.openweathermap.org/data/2.5/weather';
   private geoCoordinatesApi = 'https://api.openweathermap.org/geo/1.0/direct';
-
-  readonly openAIConfiguration = new Configuration({
-    apiKey: (environment as any).chatGPTApiKey,
-  });
-
-  readonly openAIApi = new OpenAIApi(this.openAIConfiguration);
 
   constructor(private httpClient: HttpClient) {}
 
@@ -47,13 +40,23 @@ export class WeatherService {
     );
   }
 
-  getDataFromOpenAI(text: string): Observable<any> {
-    return from(
-      this.openAIApi.createCompletion({
-        model: 'text-davinci-003',
-        prompt: text,
-        max_tokens: 256,
+  getDataFromOpenAI(text: string[]): Observable<any> {
+    const reqHeader = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + (environment as any).chatGPTApiKey,
+    });
+    const requestBody = {
+      model: 'gpt-3.5-turbo',
+      messages: text,
+    };
+    return this.httpClient
+      .post('https://api.openai.com/v1/chat/completions', requestBody, {
+        headers: reqHeader,
       })
-    );
+      .pipe(
+        switchMap((response) => {
+          return of(response);
+        })
+      );
   }
 }
